@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+</head>
+<body >
+    <div class="container">
+        
+        <div class="calculator">
+          <div class="calc-display">
+              <span data-elem='elem' id="opera-one"></span>
+              <span  data-elem='elem'  class="holder"  id="operator"></span>
+              <span  data-elem='elem' class="holder"  id="opera-two"></span>
+             
+          </div>
+    
+          <div class="calc-button">
+            <button class="operator" data-action="add">+</button>
+            <button class="operator" data-action="subtract">-</button>
+            <button class="operator" data-action="multiply">x</button>
+            <button class="operator" data-action="divide">/</button>
+            <button class="input" >7</button>
+            <button class="input" >8</button>
+            <button class="input" >9</button>
+            <button class="input" >4</button>
+            <button class="input" >5</button>
+            <button class="input" >6</button>
+            <button class="input">1</button>
+            <button class="input" >2</button>
+            <button class="input">3</button>
+            <button class="input">0</button>
+            <button  class="decimal" data-action="decimal">.</button>
+            <button   class="special"  data-action="special">AC</button>
+            <button    data-action="nothing"></button>
+            <button  class="special"  data-action="on">ON</button>
+            <button  class="special" data-action="off">OFF</button>
+            <button class="equal" data-action="equal">=</button>
+           
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+        const span =  document.querySelectorAll('[data-elem="elem"]');
+        const spanArr = Array.from(span)
+      const display = document.querySelector('.calc-display')
+      const decimal = document.querySelector('.decimal')
+      const placeholderOne = document.querySelector('#opera-one')
+      const placeholderTwo = document.querySelector('#opera-two')
+      const placeholderOperator = document.querySelector('#operator')
+      const calculate = document.querySelector('.equal');
+      const holder = document.querySelectorAll('.holder');
+      const final = document.querySelector('#opera-equal');
+      const holderArr = Array.from(holder);
+      
+     
+      const operator =  document.querySelectorAll('.operator');
+      const userInput = document.querySelectorAll('.input')
+      const special =  document.querySelectorAll('.special');
+      const arrInput = Array.from(userInput);
+      const specialArr = Array.from(special)
+      const operatorArr = Array.from(operator);
+
+      // special operator
+
+      specialArr.forEach( item => {
+
+        item.addEventListener('click', event => {
+       const { dataset } = event.target;
+       const {  action } = dataset;
+
+      if(action === 'on') {
+       
+        displayAns(holderArr,placeholderOne, 0);
+     
+        } 
+      
+      if(action === 'off') {
+        spanArr.forEach(item => {
+       item.textContent = ''
+       })
+
+      }
+      
+      })
+
+      });
+
+      operatorArr.forEach( item => {
+          item.addEventListener('click', event => {
+          let    operatorText = item.textContent;
+     const { dataset } = event.target;
+    
+
+     const {  action, textContent } = dataset;
+
+     if(action === 'add'){
+      if(placeholderOne.textContent === ''){
+        placeholderOne.textContent = 0;
+       }
+  placeholderOperator.textContent  = operatorText;
+  
+
+     }
+     if(action === 'subtract'){
+      placeholderOperator.textContent  = operatorText;
+     }
+     if(action === 'multiply'){
+      placeholderOperator.textContent  = operatorText;
+     }
+     if(action === 'divide'){
+
+      placeholderOperator.textContent  = operatorText;
+  
+
+     }
+ })
+})
+
+// numbers
+arrInput.forEach( item => {
+          item.addEventListener('click', event => {
+     const btnValue = item.textContent;
+   let displayValue = placeholderOne.textContent;
+
+
+  
+   if(placeholderOperator.textContent){
+    
+    placeholderTwo.textContent = `${ placeholderTwo.textContent }${ btnValue }`;
+   }else {
+
+    if(displayValue === '0') {
+       placeholderOne.textContent = btnValue
+   }else{
+     
+       if( placeholderOperator.textContent ){
+        placeholderTwo.textContent = `${ placeholderTwo.textContent }${ btnValue }`;
+       }else{
+        placeholderOne.textContent = `${ displayValue }${ btnValue }`;
+       }
+  
+   }
+   }
+ 
+
+  
+ })
+})
+
+// decimal
+
+decimal.addEventListener('click', event => {
+    const btnValue =decimal.textContent;
+
+  let placeholderOneValue = placeholderOne.textContent;
+  let placeholderTwoValue = placeholderTwo.textContent;
+  let placeArr = placeholderOneValue.split('');
+  let placeArrSec = placeholderTwoValue.split('');
+ 
+   
+  if( placeholderOperator.textContent ){
+    if(!placeArrSec.includes('.')){
+    placeholderTwo.textContent  = `${placeholderTwo.textContent}.`;
+  }
+       }else{
+        
+        if(!placeArr.includes('.')){
+    placeholderOne.textContent  = `${placeholderOne.textContent}.`;
+  }
+
+       }
+ 
+})
+
+
+
+// calulate answer
+const displayAns = (arr, cont, result) => {
+   arr.forEach((item, index) => {
+       item.textContent = '';
+     })
+      cont.textContent = result;
+}
+
+
+// parse operand 
+
+const operatorValue = () => ({
+  first: parseFloat(placeholderOne.textContent),
+  second: placeholderOperator.textContent,
+  third:  parseFloat(placeholderTwo.textContent)
+
+})
+
+//calculate
+calculate.addEventListener('click', event => {
+
+const objValue = operatorValue();
+const { first, second, third } = objValue;
+
+   let result;
+  if(second === '+'){
+      result = first + third;
+     displayAns(holderArr,placeholderOne, result);
+  }
+
+  if(second === 'x'){
+      result = first * third;
+      displayAns(holderArr,placeholderOne, result);
+  }
+  if(second === '/'){
+      result = first / third;
+      displayAns(holderArr,placeholderOne, result);
+  }
+
+  if(second === '-'){
+      result = first - third;
+      displayAns(holderArr,placeholderOne, result);
+  }
+ 
+ })
+      
+      
+      
+      </script>
+</body>
+</html>
