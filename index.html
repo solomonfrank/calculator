@@ -48,8 +48,8 @@
 
 
       <script>
-        const span =  document.querySelectorAll('[data-elem="elem"]');
-        const spanArr = Array.from(span)
+      const span =  document.querySelectorAll('[data-elem="elem"]');
+      const spanArr = Array.from(span)
       const display = document.querySelector('.calc-display')
       const decimal = document.querySelector('.decimal')
       const placeholderOne = document.querySelector('#opera-one')
@@ -59,23 +59,20 @@
       const holder = document.querySelectorAll('.holder');
       const final = document.querySelector('#opera-equal');
       const holderArr = Array.from(holder);
-      
-     
       const operator =  document.querySelectorAll('.operator');
       const userInput = document.querySelectorAll('.input')
       const special =  document.querySelectorAll('.special');
       const arrInput = Array.from(userInput);
       const specialArr = Array.from(special)
       const operatorArr = Array.from(operator);
+      
+      let view = false;
 
-let view = false;
-// delete a number 
-
-
-const clear =  (contentHolder, val) => {
-   let place = val.toString().split('');
-   place.pop();
-   contentHolder.textContent =  place.join('');
+      // delete a number 
+     const clear =  (contentHolder, val) => {
+     let place = val.toString().split('');
+     place.pop();
+     contentHolder.textContent =  place.join('');
 }
       
   // special operator
@@ -100,7 +97,7 @@ const clear =  (contentHolder, val) => {
 
       }
 
-      if(action ==='special'){
+      if(action ==='special') {
         let contOne = placeholderOne.textContent;
          
         let contTwo = placeholderOperator.textContent;
@@ -122,9 +119,6 @@ const clear =  (contentHolder, val) => {
        
         }
         if( (contOne !== '' && contTwo !== '') &&  contThree !== '') clear(placeholderTwo,contThree);
-       
-        
-
         if( (contOne !== '' && contTwo !== '') &&  contThree === '') clear(placeholderOperator,contTwo);
          }
       })
@@ -135,16 +129,15 @@ const clear =  (contentHolder, val) => {
       operatorArr.forEach( item => {
           item.addEventListener('click', event => {
           let    operatorText = item.textContent;
-     const { dataset } = event.target;
-    
+         const { dataset } = event.target;
+         const {  action, textContent } = dataset;
 
-     const {  action, textContent } = dataset;
-
- if(view) {
+     if(view) {
      
      if(action === 'add'){
        if(placeholderOperator.textContent && placeholderTwo ){
         const objValue = operatorValue();
+        objValue.third = isNaN(objValue.third) ? 0 :  objValue.third
        objValue.second = placeholderOperator.textContent
        cond(objValue)
        placeholderOperator.textContent = '+'
@@ -161,16 +154,20 @@ const clear =  (contentHolder, val) => {
      if(action === 'subtract') {
       if(placeholderOperator.textContent && placeholderTwo ){
         const objValue = operatorValue();
+        objValue.third = isNaN(objValue.third) ? 0 :  objValue.third
+        console.log(objValue);
        objValue.second = placeholderOperator.textContent
        cond(objValue)
        placeholderOperator.textContent = '-'
         }
+        
        placeholderOperator.textContent  = operatorText;
      }
     
      if(action === 'multiply') {
       if(placeholderOperator.textContent && placeholderTwo ){
         const objValue = operatorValue();
+        objValue.third = isNaN(objValue.third) ? 1 :  objValue.third
        objValue.second = placeholderOperator.textContent
        cond(objValue)
        placeholderOperator.textContent = '*'
@@ -180,6 +177,7 @@ const clear =  (contentHolder, val) => {
      if(action === 'divide') {
       if(placeholderOperator.textContent && placeholderTwo ){
         const objValue = operatorValue();
+        objValue.third = isNaN(objValue.third) ? 1 :  objValue.third
        objValue.second = placeholderOperator.textContent
        cond(objValue)
        placeholderOperator.textContent = '/'
@@ -197,18 +195,21 @@ arrInput.forEach( item => {
     let displayValue = placeholderOne.textContent;
 
 if(view) {
-  if(placeholderOperator.textContent){
+   
+   if(placeholderOperator.textContent){
     
     placeholderTwo.textContent = `${ placeholderTwo.textContent }${ btnValue }`;
-   }else {
+  
+   } else {
 
-    if(displayValue === '0') {
-       placeholderOne.textContent = btnValue
-   }else{
+        if(displayValue === '0') {
+            placeholderOne.textContent = btnValue
+         } else {
      
-       if( placeholderOperator.textContent ){
-        placeholderTwo.textContent = `${ placeholderTwo.textContent }${ btnValue }`;
-       }else{
+            if( placeholderOperator.textContent ){
+           placeholderTwo.textContent = `${ placeholderTwo.textContent }${ btnValue }`;
+          
+          }else{
         placeholderOne.textContent = `${ displayValue }${ btnValue }`;
        }
   
@@ -216,10 +217,6 @@ if(view) {
    }
   
 }
-  
- 
- 
-
   
  })
 })
@@ -279,6 +276,7 @@ const objValue = operatorValue();
       
   const cond = ({first, second, third }) => {
   let result;
+
   if(second === '+') {
   result = first + third;
   displayAns(holderArr,placeholderOne, result);
