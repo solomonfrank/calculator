@@ -141,7 +141,15 @@ const clear =  (contentHolder, val) => {
      const {  action, textContent } = dataset;
 
  if(view) {
+     
      if(action === 'add'){
+       if(placeholderOperator.textContent && placeholderTwo ){
+        const objValue = operatorValue();
+       objValue.second = placeholderOperator.textContent
+       cond(objValue)
+       placeholderOperator.textContent = '+'
+        }
+        
       
        if(placeholderOne.textContent === ''){
         placeholderOne.textContent = 0;
@@ -150,11 +158,34 @@ const clear =  (contentHolder, val) => {
   
 
      }
-     if(action === 'subtract') placeholderOperator.textContent  = operatorText;
-     
-     if(action === 'multiply') placeholderOperator.textContent  = operatorText;
-     
-     if(action === 'divide')  placeholderOperator.textContent  = operatorText;
+     if(action === 'subtract') {
+      if(placeholderOperator.textContent && placeholderTwo ){
+        const objValue = operatorValue();
+       objValue.second = placeholderOperator.textContent
+       cond(objValue)
+       placeholderOperator.textContent = '-'
+        }
+       placeholderOperator.textContent  = operatorText;
+     }
+    
+     if(action === 'multiply') {
+      if(placeholderOperator.textContent && placeholderTwo ){
+        const objValue = operatorValue();
+       objValue.second = placeholderOperator.textContent
+       cond(objValue)
+       placeholderOperator.textContent = '*'
+        }
+       placeholderOperator.textContent  = operatorText;
+     }
+     if(action === 'divide') {
+      if(placeholderOperator.textContent && placeholderTwo ){
+        const objValue = operatorValue();
+       objValue.second = placeholderOperator.textContent
+       cond(objValue)
+       placeholderOperator.textContent = '/'
+        }
+        placeholderOperator.textContent  = operatorText;
+        }
   }
  })
 })
@@ -243,14 +274,15 @@ const operatorValue = () => ({
 calculate.addEventListener('click', event => {
 
 const objValue = operatorValue();
-const { first, second, third } = objValue;
-
-   let result;
-  if(second === '+'){
-      result = first + third;
-     displayAns(holderArr,placeholderOne, result);
+ cond(objValue);
+  })
+      
+  const cond = ({first, second, third }) => {
+  let result;
+  if(second === '+') {
+  result = first + third;
+  displayAns(holderArr,placeholderOne, result);
   }
-
   if(second === 'x'){
       result = first * third;
       displayAns(holderArr,placeholderOne, result);
@@ -264,10 +296,8 @@ const { first, second, third } = objValue;
       result = first - third;
       displayAns(holderArr,placeholderOne, result);
   }
+      }
  
- })
-      
-      
       
       </script>
 </body>
